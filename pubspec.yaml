@@ -1,0 +1,38 @@
+name: coin_lore_app
+description: "A cryptocurrency price tracker app."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+    # State Management
+  flutter_riverpod: ^2.4.9
+
+  # Local Storage (para historial de búsqueda)
+  shared_preferences: ^2.2.2
+
+  # Internacionalización
+  easy_localization: ^3.0.2
+
+  cupertino_icons: ^1.0.8
+
+  url_launcher: ^6.2.5 # Para abrir enlaces
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Assets para traducciones
+  assets:
+    - assets/translations/
