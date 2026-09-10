@@ -8,6 +8,7 @@ import '../providers/crypto_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/crypto_table_header.dart';
 import '../widgets/crypto_table_row.dart';
+import '../widgets/refresh_button.dart';
 
 class CryptoListScreen extends ConsumerStatefulWidget {
   const CryptoListScreen({super.key});
@@ -96,6 +97,9 @@ class _CryptoListScreenState extends ConsumerState<CryptoListScreen> {
               // TODO: Implementar selector de idioma
             },
           ),
+
+          // ✅ NUEVO: Botón de refresh
+          const RefreshButton(),
 
           IconButton(
             icon: const Icon(Icons.search),

@@ -73,3 +73,6 @@ final isLoadingProvider = Provider<bool>((ref) {
 
 // ✅ Provider para errores
 final errorProvider = StateProvider<String?>((ref) => null);
+
+// ✅ NUEVO: Provider para el estado de refresco
+final isRefreshingProvider = StateProvider<bool>((ref) => false);
