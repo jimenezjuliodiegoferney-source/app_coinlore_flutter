@@ -1,3 +1,4 @@
+import 'package:coin_lore_app/core/utils/responsive.dart';
 import 'package:coin_lore_app/models/crypto_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +32,8 @@ class _CryptoDetailScreenState extends ConsumerState<CryptoDetailScreen> {
   Widget build(BuildContext context) {
     final detailAsync = ref.watch(detailProvider);
     final isDark = ref.watch(themeProvider) == ThemeMode.dark;
+    final isTabletOrDesktop =
+        Responsive.isTablet(context) || Responsive.isDesktop(context);
 
     return Scaffold(
       backgroundColor: isDark ? Colors.grey[900] : Colors.grey[50],
@@ -51,14 +54,6 @@ class _CryptoDetailScreenState extends ConsumerState<CryptoDetailScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.share, color: Colors.white),
-            onPressed: () {
-              // TODO: Compartir información de la crypto
-            },
-          ),
-        ],
       ),
       body: detailAsync.when(
         loading: () => const Center(
@@ -83,14 +78,6 @@ class _CryptoDetailScreenState extends ConsumerState<CryptoDetailScreen> {
                   color: isDark ? Colors.white70 : Colors.black54,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                error.toString(),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isDark ? Colors.white38 : Colors.black38,
-                ),
-              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -102,18 +89,40 @@ class _CryptoDetailScreenState extends ConsumerState<CryptoDetailScreen> {
           ),
         ),
         data: (detail) {
+          // ✅ RESPONSIVE: Fila en tablet/desktop, columna en móvil
+          if (isTabletOrDesktop) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Columna izquierda: header + enlaces
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        _buildHeader(detail, isDark),
+                        const SizedBox(height: 16),
+                        DetailSocialLinks(detail: detail),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 24),
+                  // Columna derecha: info
+                  Expanded(flex: 3, child: DetailInfoCard(detail: detail)),
+                ],
+              ),
+            );
+          }
+
+          // Móvil: columna
           return SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Cabecera con logo y precio
                 _buildHeader(detail, isDark),
-
-                // Tarjeta de información
                 DetailInfoCard(detail: detail),
-
-                // Enlaces sociales
                 DetailSocialLinks(detail: detail),
               ],
             ),

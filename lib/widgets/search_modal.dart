@@ -1,3 +1,4 @@
+import 'package:coin_lore_app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,32 +71,43 @@ class _SearchModalState extends ConsumerState<SearchModal> {
     final historyAsync = ref.watch(searchHistoryProvider);
     final allCryptosAsync = ref.watch(allCryptosProvider);
 
+    // ✅ NUEVO: Ancho máximo en tablet/desktop
+    final isDesktop = Responsive.isDesktop(context);
+    final isTablet = Responsive.isTablet(context);
+    final maxWidth = isDesktop ? 700.0 : (isTablet ? 600.0 : double.infinity);
+    final padding = Responsive.horizontalPadding(context);
+
     return Scaffold(
       backgroundColor: isDark ? Colors.black87 : Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildSearchBar(isDark),
-            Expanded(
-              child: _buildContent(
-                isDark,
-                query,
-                results,
-                historyAsync,
-                allCryptosAsync,
-              ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildSearchBar(isDark, padding),
+                Expanded(
+                  child: _buildContent(
+                    isDark,
+                    query,
+                    results,
+                    historyAsync,
+                    allCryptosAsync,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSearchBar(bool isDark) {
-    final query = ref.watch(searchQueryProvider); // ✅ Obtener query
+  Widget _buildSearchBar(bool isDark, double padding) {
+    final query = ref.watch(searchQueryProvider);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: padding, vertical: 12),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[850] : Colors.grey[100],
         border: Border(

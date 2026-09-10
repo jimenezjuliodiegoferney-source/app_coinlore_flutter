@@ -1,3 +1,4 @@
+import 'package:coin_lore_app/core/utils/responsive.dart';
 import 'package:coin_lore_app/views/crypto_detail_secreen.dart';
 import 'package:coin_lore_app/widgets/search_modal.dart';
 import 'package:flutter/material.dart';
@@ -99,11 +100,16 @@ class _CryptoListScreenState extends ConsumerState<CryptoListScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              // ✅ ABRIR EL MODAL
+              // Modal con restricción de ancho en tablet/desktop
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
+                constraints: BoxConstraints(
+                  maxWidth: Responsive.isDesktop(context)
+                      ? 700
+                      : double.infinity,
+                ),
                 builder: (context) => const SearchModal(),
               );
             },
@@ -115,13 +121,16 @@ class _CryptoListScreenState extends ConsumerState<CryptoListScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.symmetric(
+                horizontal: Responsive.horizontalPadding(context),
+                vertical: 12,
+              ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Precio de criptomonedas hoy + cotización',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: Responsive.fontSize(context, 16),
                     fontWeight: FontWeight.w500,
                     color: isDark ? Colors.white70 : Colors.black54,
                   ),
